@@ -1,40 +1,30 @@
 "use client";
-
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { banner_list } from "@/utils/Strings";
-
 import {
   BsChevronLeft as PrevIcon,
   BsChevronRight as NextIcon,
 } from "react-icons/bs";
 import CarouselItem from "./CarouselItem";
+import Progress from "./Progress";
 
 function CarouselBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalBanners = banner_list.length;
   const carouselRef = useRef(null);
-
+  const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const goToNextBanner = () => {
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1;
-      if (nextIndex >= totalBanners) {
-        return 0;
-      } else {
-        return nextIndex;
-      }
-    });
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalBanners);
+    setProgress(0);
     scrollToNextBanner();
   };
 
   const goToPrevBanner = () => {
-    setCurrentIndex((prevIndex) => {
-      const prevIndexValue = (prevIndex - 1 + totalBanners) % totalBanners;
-      if (prevIndex === 0) {
-        return totalBanners - 1;
-      } else {
-        return prevIndexValue;
-      }
-    });
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + totalBanners) % totalBanners
+    );
+    setProgress(0);
     scrollToPrevBanner();
   };
 
@@ -42,17 +32,13 @@ function CarouselBanner() {
     if (carouselRef.current) {
       const scrollWidth = carouselRef.current.scrollWidth;
       const itemWidth = scrollWidth / totalBanners;
-
       let nextScrollLeft;
       if (currentIndex + 1 >= totalBanners) {
         nextScrollLeft = 0;
       } else {
         nextScrollLeft = (currentIndex + 1) * itemWidth;
       }
-      carouselRef.current.scrollTo({
-        left: nextScrollLeft,
-        behavior: "smooth",
-      });
+      showSelectedBanner(carouselRef.current, nextScrollLeft);
     }
   };
 
@@ -67,18 +53,113 @@ function CarouselBanner() {
       } else {
         prevScrollLeft = (currentIndex - 1) * itemWidth;
       }
-      carouselRef.current.scrollTo({
-        left: prevScrollLeft,
+      showSelectedBanner(carouselRef.current, prevScrollLeft);
+    }
+  };
+
+  const scrollToBannerByIndex = (index) => {
+    setCurrentIndex(index);
+    const container = carouselRef.current;
+    if (container) {
+      const scrollWidth = container.scrollWidth;
+      const itemWidth = scrollWidth / totalBanners;
+      showSelectedBanner(container, index * itemWidth);
+    }
+  };
+
+  const showSelectedBanner = (container, value) => {
+    if (container) {
+      container.scrollTo({
+        left: value,
         behavior: "smooth",
       });
     }
   };
 
+  // change currentindex by touch
+
+  useEffect(() => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5,
+    };
+
+    const handleIntersection = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const visibleIndex = Array.from(
+            entry.target.parentNode.children
+          ).indexOf(entry.target);
+
+          // Handle special cases for first and last banners
+          if (visibleIndex === 0 && currentIndex === totalBanners - 1) {
+            setCurrentIndex(visibleIndex);
+          } else if (visibleIndex === totalBanners - 1 && currentIndex === 0) {
+            setCurrentIndex(visibleIndex);
+          } else {
+            setCurrentIndex(visibleIndex);
+          }
+          setProgress(0);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions
+    );
+
+    const carouselItems = container.children;
+    Array.from(carouselItems).forEach((item) => {
+      observer.observe(item);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [currentIndex, totalBanners]);
+
+  // infinite automatic go to next banner after 5 seconds
+
+  useEffect(() => {
+    if (!isPaused) {
+      const progressInterval = setInterval(() => {
+        setProgress((prevProgress) => {
+          const newProgress = prevProgress + 1;
+          if (newProgress == 100) {
+            clearInterval(progressInterval);
+            setProgress(0);
+            goToNextBanner();
+          }
+          return newProgress;
+        });
+      }, 5 * 10);
+
+      return () => {
+        clearInterval(progressInterval);
+      };
+    }
+  }, [isPaused, currentIndex]);
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+  };
+
   return (
     <div className="w-full flex flex-col gap-5">
-      {/* carousel */}
-
-      <div className="relative">
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {/* prev && next button */}
         <div
           dir="ltr"
@@ -95,7 +176,7 @@ function CarouselBanner() {
         {/* carousel items */}
         <div
           ref={carouselRef}
-          className="w-full max-w-[2800px] mx-auto carousel  "
+          className="w-full max-w-[2800px] mx-auto carousel"
         >
           {banner_list.map((item, index) => (
             <CarouselItem key={item.id} item={item} />
@@ -104,18 +185,15 @@ function CarouselBanner() {
       </div>
 
       {/* progress bar */}
-
-      <div className="grid grid-flow-col gap-5 justify-center ">
-        {banner_list?.map((item) => {
-          return (
-            <progress
-              key={item?.id}
-              value={30}
-              max={100}
-              className="progress overflow-hidden bg-gray-500  h-1 rounded-2xl cursor-pointer w-3 lg:w-5"
-            />
-          );
-        })}
+      <div className="grid grid-flow-col gap-5 justify-center">
+        {banner_list?.map((item, index) => (
+          <Progress
+            key={item?.id}
+            value={currentIndex == index ? progress : "0"}
+            active={currentIndex === index}
+            scrollTo={() => scrollToBannerByIndex(index)}
+          />
+        ))}
       </div>
     </div>
   );
