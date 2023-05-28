@@ -33,6 +33,13 @@
   }
 }
 
+.progress::-webkit-progress-value {
+  background-color: yellowgreen;
+}
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
 @layer components {
   .textField__input {
     @apply w-full py-3 px-4 rounded-xl bg-gray-100 text-secondary-900 border border-gray-100 outline-none duration-200 transition-all ease-in-out hover:border-primary-300 focus:outline-none focus:border-primary-300 focus:shadow-input-focus focus:bg-white;
@@ -63,6 +70,24 @@
   }
   .badge--error {
     @apply bg-rose-600 text-white;
+  }
+
+  .btn-slider {
+    @apply w-8 h-8 lg:w-12 lg:h-12 bg-[hsla(0,0%,100%,.3)] z-10   rounded-lg text-white flex items-center justify-center  pointer-events-auto;
+  }
+
+  .btn-slider > .button {
+    @apply w-4 h-4 lg:w-5 lg:h-5 block;
+  }
+
+  .carousel {
+    @apply flex overflow-x-scroll scroll-smooth snap-x snap-mandatory;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .carousel-item {
+    @apply flex flex-none snap-start;
   }
 }
 

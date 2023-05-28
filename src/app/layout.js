@@ -9,15 +9,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="ltr">
       <body
         suppressHydrationWarning={true}
         className={`${vazirFont.variable} font-sans`}
       >
         <Header />
-        <div className="container h-[calc(100vh-56px)] xl:max-w-screen-xl py-4">
-          {children}
-        </div>
+        <div className="w-full h-[calc(100vh-56px)] block ">{children}</div>
       </body>
     </html>
   );
