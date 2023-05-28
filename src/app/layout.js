@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
         className={`${vazirFont.variable} font-sans`}
       >
         <Header />
-        <div className="container h-[calc(100vh-56px)] xl:max-w-screen-xl">
+        <div className="container h-[calc(100vh-56px)] xl:max-w-screen-xl py-4">
           {children}
         </div>
       </body>
