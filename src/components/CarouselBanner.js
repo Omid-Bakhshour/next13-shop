@@ -59,17 +59,19 @@ function CarouselBanner() {
       let nextScrollLeft;
 
       if (isRtl) {
+        nextScrollLeft =
+          currentIndex < totalBanners - 1
+            ? container.scrollLeft - containerWidth
+            : containerWidth - 0;
+
         if (currentIndex < totalBanners - 1) {
           nextScrollLeft = container.scrollLeft - containerWidth;
-        } else {
-          nextScrollLeft = 0;
         }
       } else {
-        if (currentIndex < totalBanners - 1) {
-          nextScrollLeft = (currentIndex + 1) * itemWidth;
-        } else {
-          nextScrollLeft = containerWidth - itemWidth;
-        }
+        nextScrollLeft =
+          currentIndex < totalBanners - 1
+            ? container.scrollLeft + containerWidth
+            : containerWidth - itemWidth;
       }
 
       showSelectedBanner(container, nextScrollLeft);
@@ -85,20 +87,15 @@ function CarouselBanner() {
       let prevScrollLeft;
 
       if (isRtl) {
-        const remainingScrollWidth = currentIndex * itemWidth;
-        if (currentIndex > 0) {
-          prevScrollLeft = containerWidth - remainingScrollWidth;
-        } else {
-          prevScrollLeft = containerWidth - scrollWidth;
-        }
+        prevScrollLeft =
+          currentIndex > 0
+            ? container.scrollLeft + containerWidth
+            : containerWidth - scrollWidth;
       } else {
-        const remainingScrollWidth = currentIndex * itemWidth;
-
-        if (currentIndex > 0) {
-          prevScrollLeft = remainingScrollWidth - containerWidth;
-        } else {
-          prevScrollLeft = scrollWidth - itemWidth;
-        }
+        prevScrollLeft =
+          currentIndex > 0
+            ? container.scrollLeft - containerWidth
+            : scrollWidth - itemWidth;
       }
 
       showSelectedBanner(container, prevScrollLeft);
@@ -112,8 +109,9 @@ function CarouselBanner() {
       const scrollWidth = container.scrollWidth;
       const itemWidth = scrollWidth / totalBanners;
       const scrollLeft = isRtl
-        ? (totalBanners - index - 1) * itemWidth
+        ? (totalBanners - index) * itemWidth - scrollWidth
         : index * itemWidth;
+
       showSelectedBanner(container, scrollLeft);
     }
   };
@@ -132,8 +130,6 @@ function CarouselBanner() {
       }
     }
   };
-
-  // Rest of the code...
 
   // change currentindex by touch
 
@@ -154,7 +150,6 @@ function CarouselBanner() {
             entry.target.parentNode.children
           ).indexOf(entry.target);
 
-          // Handle special cases for first and last banners
           setCurrentIndex(visibleIndex);
 
           setProgress(0);

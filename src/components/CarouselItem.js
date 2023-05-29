@@ -9,10 +9,11 @@ function CarouselItem({ item }) {
       href={item?.link}
       className="carousel-item flex-none w-full lg:h-[400px] h-[200px] relative"
     >
-      <span className="w-full flex items-center justify-center bg-black text-white">
+      {/* test */}
+      {/* <span className="w-full flex items-center justify-center bg-black text-white">
         {item?.id}
-      </span>
-      {/* <Image src={item?.img} loading="lazy" fill alt={item?.img} /> */}
+      </span> */}
+      <Image src={item?.img} loading="lazy" fill alt={item?.img} />
     </div>
   );
 }
