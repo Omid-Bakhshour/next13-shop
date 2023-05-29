@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="ltr">
+    <html lang="fa">
       <body
         suppressHydrationWarning={true}
         className={`${vazirFont.variable} font-sans`}

@@ -12,12 +12,30 @@ function CarouselBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalBanners = banner_list.length;
   const carouselRef = useRef(null);
+  const firstRef = useRef(null);
+
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  const [isRtl, setIsRtl] = useState(false);
+
+  useEffect(() => {
+    const firstDiv = firstRef.current;
+    if (firstDiv && window.getComputedStyle(firstDiv).direction === "rtl") {
+      setIsRtl(true);
+    } else {
+      setIsRtl(false);
+    }
+  }, []);
   const goToNextBanner = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % totalBanners);
     setProgress(0);
-    scrollToNextBanner();
+
+    if (isRtl) {
+      scrollToPrevBanner();
+    } else {
+      scrollToNextBanner();
+    }
   };
 
   const goToPrevBanner = () => {
@@ -25,35 +43,65 @@ function CarouselBanner() {
       (prevIndex) => (prevIndex - 1 + totalBanners) % totalBanners
     );
     setProgress(0);
-    scrollToPrevBanner();
+    if (isRtl) {
+      scrollToNextBanner();
+    } else {
+      scrollToPrevBanner();
+    }
   };
 
   const scrollToNextBanner = () => {
     if (carouselRef.current) {
-      const scrollWidth = carouselRef.current.scrollWidth;
+      const container = carouselRef.current;
+      const scrollWidth = container.scrollWidth;
+      const containerWidth = container.clientWidth;
       const itemWidth = scrollWidth / totalBanners;
       let nextScrollLeft;
-      if (currentIndex + 1 >= totalBanners) {
-        nextScrollLeft = 0;
+
+      if (isRtl) {
+        if (currentIndex < totalBanners - 1) {
+          nextScrollLeft = container.scrollLeft - containerWidth;
+        } else {
+          nextScrollLeft = 0;
+        }
       } else {
-        nextScrollLeft = (currentIndex + 1) * itemWidth;
+        if (currentIndex < totalBanners - 1) {
+          nextScrollLeft = (currentIndex + 1) * itemWidth;
+        } else {
+          nextScrollLeft = containerWidth - itemWidth;
+        }
       }
-      showSelectedBanner(carouselRef.current, nextScrollLeft);
+
+      showSelectedBanner(container, nextScrollLeft);
     }
   };
 
   const scrollToPrevBanner = () => {
     if (carouselRef.current) {
-      const scrollWidth = carouselRef.current.scrollWidth;
+      const container = carouselRef.current;
+      const scrollWidth = container.scrollWidth;
+      const containerWidth = container.clientWidth;
       const itemWidth = scrollWidth / totalBanners;
       let prevScrollLeft;
-      if (currentIndex === 0) {
-        // If current index is 0, scroll to the last banner
-        prevScrollLeft = (totalBanners - 1) * itemWidth;
+
+      if (isRtl) {
+        const remainingScrollWidth = currentIndex * itemWidth;
+        if (currentIndex > 0) {
+          prevScrollLeft = containerWidth - remainingScrollWidth;
+        } else {
+          prevScrollLeft = containerWidth - scrollWidth;
+        }
       } else {
-        prevScrollLeft = (currentIndex - 1) * itemWidth;
+        const remainingScrollWidth = currentIndex * itemWidth;
+
+        if (currentIndex > 0) {
+          prevScrollLeft = remainingScrollWidth - containerWidth;
+        } else {
+          prevScrollLeft = scrollWidth - itemWidth;
+        }
       }
-      showSelectedBanner(carouselRef.current, prevScrollLeft);
+
+      showSelectedBanner(container, prevScrollLeft);
     }
   };
 
@@ -63,18 +111,29 @@ function CarouselBanner() {
     if (container) {
       const scrollWidth = container.scrollWidth;
       const itemWidth = scrollWidth / totalBanners;
-      showSelectedBanner(container, index * itemWidth);
+      const scrollLeft = isRtl
+        ? (totalBanners - index - 1) * itemWidth
+        : index * itemWidth;
+      showSelectedBanner(container, scrollLeft);
     }
   };
 
   const showSelectedBanner = (container, value) => {
     if (container) {
-      container.scrollTo({
-        left: value,
-        behavior: "smooth",
-      });
+      if (container.scrollTo) {
+        if (container.scrollLeft !== value) {
+          container.scrollTo({
+            left: value,
+            behavior: "smooth",
+          });
+        }
+      } else {
+        container.scrollLeft = value;
+      }
     }
   };
+
+  // Rest of the code...
 
   // change currentindex by touch
 
@@ -96,13 +155,8 @@ function CarouselBanner() {
           ).indexOf(entry.target);
 
           // Handle special cases for first and last banners
-          if (visibleIndex === 0 && currentIndex === totalBanners - 1) {
-            setCurrentIndex(visibleIndex);
-          } else if (visibleIndex === totalBanners - 1 && currentIndex === 0) {
-            setCurrentIndex(visibleIndex);
-          } else {
-            setCurrentIndex(visibleIndex);
-          }
+          setCurrentIndex(visibleIndex);
+
           setProgress(0);
         }
       });
@@ -133,7 +187,11 @@ function CarouselBanner() {
           if (newProgress == 100) {
             clearInterval(progressInterval);
             setProgress(0);
-            goToNextBanner();
+            if (isRtl) {
+              goToPrevBanner();
+            } else {
+              goToNextBanner();
+            }
           }
           return newProgress;
         });
@@ -154,17 +212,14 @@ function CarouselBanner() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div ref={firstRef} className="w-full flex flex-col gap-5" dir="ltr">
       <div
         className="relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {/* prev && next button */}
-        <div
-          dir="ltr"
-          className="container mx-auto absolute left-0 right-0 z-10 flex justify-between top-0 bottom-0 items-center pointer-events-none  px-2"
-        >
+        <div className="container ltr:flex-row rtl:flex-row-reverse mx-auto absolute left-0 right-0 z-10 flex justify-between top-0 bottom-0 items-center pointer-events-none  px-2">
           <button className="btn-slider" title="Prev" onClick={goToPrevBanner}>
             <PrevIcon className="button" />
           </button>

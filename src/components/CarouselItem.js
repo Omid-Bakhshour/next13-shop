@@ -5,12 +5,15 @@ Link;
 
 function CarouselItem({ item }) {
   return (
-    <Link
+    <div
       href={item?.link}
       className="carousel-item flex-none w-full lg:h-[400px] h-[200px] relative"
     >
-      <Image src={item?.img} loading="lazy" fill alt={item?.img} />
-    </Link>
+      <span className="w-full flex items-center justify-center bg-black text-white">
+        {item?.id}
+      </span>
+      {/* <Image src={item?.img} loading="lazy" fill alt={item?.img} /> */}
+    </div>
   );
 }
 

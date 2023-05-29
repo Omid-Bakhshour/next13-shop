@@ -6,25 +6,25 @@ export const banner_list = [
   },
 
   {
-    id: 3,
+    id: 1,
     img: "/images/banner3.webp",
     link: "https://www.google.com/",
   },
 
   {
-    id: 1,
+    id: 2,
     img: "/images/banner2.webp",
     link: "https://www.tarafdari.com/",
   },
 
   {
-    id: 4,
+    id: 3,
     img: "/images/banner1.webp",
     link: "https://www.tarafdari.com/",
   },
 
   {
-    id: 2,
+    id: 4,
     img: "/images/banner3.webp",
     link: "https://www.tarafdari.com/",
   },
