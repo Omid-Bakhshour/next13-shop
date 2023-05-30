@@ -1,4 +1,5 @@
-import CarouselBanner from "@/components/CarouselBanner";
+import CarouselBanner from "@/components/carouselBanner";
+import CarouselCategory from "@/components/carouselCategory";
 
 export default function Home() {
   return (
@@ -6,6 +7,9 @@ export default function Home() {
       {/* carousel banner */}
 
       <CarouselBanner />
+
+      {/* carousel category */}
+      <CarouselCategory />
     </main>
   );
 }

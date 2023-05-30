@@ -201,7 +201,7 @@ function CarouselBanner() {
   };
 
   return (
-    <div ref={firstRef} className="w-full flex flex-col gap-5" dir="ltr">
+    <section ref={firstRef} className="w-full flex flex-col gap-5" dir="ltr">
       <div
         className="relative"
         onMouseEnter={handleMouseEnter}
@@ -239,7 +239,7 @@ function CarouselBanner() {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
