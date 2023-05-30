@@ -53,25 +53,19 @@ function CarouselBanner() {
   const scrollToNextBanner = () => {
     if (carouselRef.current) {
       const container = carouselRef.current;
-      const scrollWidth = container.scrollWidth;
       const containerWidth = container.clientWidth;
-      const itemWidth = scrollWidth / totalBanners;
       let nextScrollLeft;
 
       if (isRtl) {
         nextScrollLeft =
           currentIndex < totalBanners - 1
             ? container.scrollLeft - containerWidth
-            : containerWidth - 0;
-
-        if (currentIndex < totalBanners - 1) {
-          nextScrollLeft = container.scrollLeft - containerWidth;
-        }
+            : containerWidth;
       } else {
         nextScrollLeft =
           currentIndex < totalBanners - 1
             ? container.scrollLeft + containerWidth
-            : containerWidth - itemWidth;
+            : 0;
       }
 
       showSelectedBanner(container, nextScrollLeft);
