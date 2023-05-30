@@ -33,7 +33,7 @@ function CarouselCategory() {
 
     if (isRtl) {
       if (Math.round(Math.abs(scroll)) == scrollWidth) {
-        console.log("get more");
+        console.log("get more item");
       } else {
         carouselNavigation(container, scroll);
       }
@@ -53,7 +53,7 @@ function CarouselCategory() {
       carouselNavigation(container, scroll);
     } else {
       if (Math.round(scroll) == scrollWidth) {
-        console.log("get more");
+        console.log("get more item");
       } else {
         carouselNavigation(container, scroll);
       }
