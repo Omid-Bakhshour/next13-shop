@@ -13,9 +13,9 @@ function SendOTPFrom({ phoneNumber, onChange, onSubmit, isLoading }) {
         />
         <div>
           {isLoading ? (
-            <div>...loading</div>
-          ) : (
             // <Loading />
+            <div>loading...</div>
+          ) : (
             <button type="submit" className="btn btn--primary w-full">
               ارسال کد تایید
             </button>

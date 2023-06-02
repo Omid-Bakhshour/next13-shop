@@ -77,7 +77,6 @@ function CarouselBanner() {
       const container = carouselRef.current;
       const scrollWidth = container.scrollWidth;
       const containerWidth = container.clientWidth;
-      const itemWidth = scrollWidth / totalBanners;
       let prevScrollLeft;
 
       if (isRtl) {
@@ -89,7 +88,7 @@ function CarouselBanner() {
         prevScrollLeft =
           currentIndex > 0
             ? container.scrollLeft - containerWidth
-            : scrollWidth - itemWidth;
+            : scrollWidth - containerWidth;
       }
 
       showSelectedBanner(container, prevScrollLeft);
@@ -143,9 +142,7 @@ function CarouselBanner() {
           const visibleIndex = Array.from(
             entry.target.parentNode.children
           ).indexOf(entry.target);
-
           setCurrentIndex(visibleIndex);
-
           setProgress(0);
         }
       });
@@ -201,7 +198,7 @@ function CarouselBanner() {
   };
 
   return (
-    <section ref={firstRef} className="w-full flex flex-col gap-5" dir="ltr">
+    <section ref={firstRef} className="w-full flex flex-col gap-5">
       <div
         className="relative"
         onMouseEnter={handleMouseEnter}

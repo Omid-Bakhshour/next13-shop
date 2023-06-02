@@ -73,7 +73,7 @@
   }
 
   .btn-slider {
-    @apply w-8 h-8 lg:w-12 lg:h-12 bg-[hsla(0,0%,100%,.3)] z-10   rounded-lg text-white flex items-center justify-center  pointer-events-auto;
+    @apply w-8 h-8 lg:w-12 lg:h-12 bg-[hsla(0,0%,100%,.3)] dark:bg-gray-800 z-10   rounded-lg text-white flex items-center justify-center  pointer-events-auto;
   }
 
   .btn-slider > .button {

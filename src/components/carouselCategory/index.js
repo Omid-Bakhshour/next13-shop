@@ -78,7 +78,6 @@ function CarouselCategory() {
   return (
     <section
       ref={firstRef}
-      dir="ltr"
       className="w-full sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] flex flex-col mx-auto px-[22px] lg:px-0 mt-5 md:mb-3 md:gap-2 "
     >
       {/* title and check all button */}
@@ -110,14 +109,14 @@ function CarouselCategory() {
             title="Prev"
             onClick={goToPrevious}
           >
-            <PrevIcon className="button text-black " />
+            <PrevIcon className="button text-black dark:text-white " />
           </button>
           <button
             className="btn-slider bg-white shadow-lg"
             title="Next"
             onClick={goToNext}
           >
-            <NextIcon className="button  text-black " />
+            <NextIcon className="button  text-black dark:text-white " />
           </button>
         </div>
 

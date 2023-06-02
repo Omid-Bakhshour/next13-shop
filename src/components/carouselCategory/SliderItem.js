@@ -4,7 +4,7 @@ import React from "react";
 function SliderItem({ item }) {
   return (
     <div>
-      <div className="p-3.5 bg-white block hover:shadow-lg  justify-center rounded-lg ">
+      <div className="p-3.5 bg-white dark:bg-slate-900 block hover:dark:shadow-slate-950 hover:shadow-lg   justify-center rounded-lg ">
         <article className="flex flex-col">
           {/* image */}
 
@@ -13,7 +13,7 @@ function SliderItem({ item }) {
           </div>
 
           {/* text and price */}
-          <h3 className="sbt text-black-greyscale-100 my-3.5 max-w-[192px] line-clamp-2 text-[14px]   text-gray-500">
+          <h3 className="sbt  my-3.5 max-w-[192px] line-clamp-2 text-[14px]   text-gray-500 dark:text-white">
             {item?.title}
           </h3>
 
