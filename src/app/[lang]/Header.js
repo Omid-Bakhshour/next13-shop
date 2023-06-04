@@ -3,7 +3,7 @@
 import DarkmodeBtn from "@/components/DarkmodeBtn";
 import Link from "next/link";
 
-function Header() {
+function Header({ dictionary }) {
   return (
     <header
       className={`shadow-md  sticky top-0 z-20 transition-all duration-200 bg-white dark:bg-slate-900
@@ -23,7 +23,7 @@ function Header() {
           </li>
           <li>
             <Link className="block py-2" href="/auth">
-              ورود
+              {dictionary?.header?.login}
             </Link>
           </li>
 

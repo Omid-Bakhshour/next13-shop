@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.2.32",
     "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
@@ -16,6 +17,7 @@
     "eslint-config-next": "13.4.4",
     "formik": "^2.4.0",
     "i18n": "^0.15.1",
+    "negotiator": "^0.6.3",
     "next": "13.4.4",
     "next-themes": "^0.2.1",
     "postcss": "8.4.23",
