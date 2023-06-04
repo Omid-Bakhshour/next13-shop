@@ -25,7 +25,7 @@ export default async function RootLayout({ children, params: { lang } }) {
       >
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <Toaster />
-          <Header dictionary={dictionary} />
+          <Header dictionary={dictionary} lang={lang} />
           <div className="w-full h-[calc(100vh-56px)] block ">{children}</div>
         </Providers>
       </body>

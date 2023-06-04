@@ -1,3 +1,4 @@
+// Import cookies-next library
 import { NextResponse } from "next/server";
 
 import { i18n } from "./i18n-config";
@@ -12,43 +13,61 @@ function getLocale(request) {
 
   // Use negotiator and intl-localematcher to get best locale
   let languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+
   // @ts-ignore locales are readonly
   const locales = i18n.locales;
+
   return matchLocale(languages, locales, i18n.defaultLocale);
 }
 
 export function middleware(request) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname, searchParams } = request.nextUrl;
 
-  // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
-  // // If you have one
-  // if (
-  //   [
-  //     '/manifest.json',
-  //     '/favicon.ico',
-  //     // Your other files in `public`
-  //   ].includes(pathname)
-  // )
-  //   return
+  if (
+    [
+      "/manifest.json",
+      "/favicon.ico",
+      "/next.svg",
+      "/vercel.svg",
+      "/thirteen.svg",
+      "/sitemap.xml",
+      "/sitemap-0.xml",
+      "/sitemap-*.xml",
+      "/images/*.jpg",
+      "/*.jpg",
+      "/*.svg",
+      "/*.png",
+      "/og.jpg",
+    ].includes(pathname)
+  )
+    return;
 
-  // Check if there is any supported locale in the pathname
+  if (
+    pathname.startsWith(`/${i18n.defaultLocale}/`) ||
+    pathname === `/${i18n.defaultLocale}`
+  ) {
+    const newUrl = new URL(
+      pathname.replace(
+        `/${i18n.defaultLocale}`,
+        pathname === `/${i18n.defaultLocale}` ? "/" : ""
+      ),
+      request.url
+    );
+    newUrl.search = searchParams.toString();
+    return NextResponse.redirect(newUrl, { status: 301 });
+  }
+
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
-  // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
-
-    // e.g. incoming request is /products
-    // The new URL is now /en-US/products
-    return NextResponse.redirect(
-      new URL(`/${locale}/${pathname}`, request.url)
-    );
+    const newUrl = new URL(`/${i18n.defaultLocale}${pathname}`, request.url);
+    newUrl.search = searchParams.toString();
+    return NextResponse.rewrite(newUrl);
   }
 }
 
 export const config = {
-  // Skip all paths that should not be internationalized
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };

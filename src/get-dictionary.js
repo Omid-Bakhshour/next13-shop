@@ -7,4 +7,12 @@ const dictionaries = {
   fa: () => import("./dictionaries/fa.json").then((module) => module.default),
 };
 
-export const getDictionary = async (locale) => dictionaries[locale]();
+export const getDictionary = async (locale) => {
+  if (locale !== "favicon.ico") {
+    if (dictionaries.hasOwnProperty(locale)) {
+      return dictionaries[locale]();
+    } else {
+      throw new Error(`Dictionary for locale '${locale}' not found.`);
+    }
+  }
+};
