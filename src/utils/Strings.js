@@ -84,3 +84,6 @@ export const slider_list = [
     title: "Sony XR65A80J 4K OLED Smart Television 65inc...",
   },
 ];
+
+
+

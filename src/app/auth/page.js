@@ -26,8 +26,6 @@ function AuthPage() {
   const checkOtpHandler = async (e) => {
     e.preventDefault();
     try {
-      // const { message, user } = await mutateCheckOtp({ phoneNumber, otp });
-
       const result = await http.post("/user/check-otp", { phoneNumber, otp });
       setOtpResponse(result?.data);
       toast.success(result?.data?.data?.message);
@@ -37,8 +35,6 @@ function AuthPage() {
       } else {
         router.push("/complete-profile");
       }
-      // push -> /complete-profile
-      // isActive -> / : /complete-profile
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
