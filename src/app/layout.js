@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning={true}>
+    <html lang="fa" dir="ltr" suppressHydrationWarning={true}>
       <body
         suppressHydrationWarning={true}
         className={`${vazirFont.variable} font-sans bg-white dark:bg-slate-900`}
@@ -19,7 +19,9 @@ export default function RootLayout({ children }) {
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <Toaster />
           <Header />
-          <div className="w-full h-[calc(100vh-56px)] block ">{children}</div>
+          <div className="w-full h-[calc(100vh-56px)] block overflow-y-auto ">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

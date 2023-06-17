@@ -47,6 +47,11 @@ function Header() {
             </Link>
           </li>
           <li>
+            <Link className="block py-2" href="/3dmodel">
+              مدل سه بعدی
+            </Link>
+          </li>
+          <li>
             {user ? (
               <span>{user.name}</span>
             ) : (
