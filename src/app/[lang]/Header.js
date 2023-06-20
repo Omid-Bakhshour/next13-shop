@@ -1,5 +1,6 @@
 "use client";
 
+import ChangeLanguage from "@/components/ChangeLanguage";
 import DarkmodeBtn from "@/components/DarkmodeBtn";
 import Link from "next/link";
 
@@ -29,6 +30,10 @@ function Header({ dictionary, lang }) {
 
           <li>
             <DarkmodeBtn />
+          </li>
+
+          <li>
+            <ChangeLanguage lang={lang} />
           </li>
         </ul>
       </nav>

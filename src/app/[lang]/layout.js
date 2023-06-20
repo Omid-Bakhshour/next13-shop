@@ -20,7 +20,7 @@ export default async function RootLayout({ children, params: { lang } }) {
       suppressHydrationWarning={true}
     >
       <body
-        className={`${vazirFont.variable} font-sans bg-white dark:bg-slate-900`}
+        className={`${vazirFont.variable} font-sans rtl:bg-white ltr:bg-slate-950 `}
         suppressHydrationWarning={true}
       >
         <Providers attribute="class" defaultTheme="system" enableSystem>
